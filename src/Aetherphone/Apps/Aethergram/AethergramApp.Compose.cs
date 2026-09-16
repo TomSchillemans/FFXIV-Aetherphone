@@ -231,9 +231,13 @@ internal sealed partial class AethergramApp
         var top = area.Min.Y + AppHeader.Height * scale;
         var paneHeight = MathF.Min(area.Width, (area.Max.Y - top) * ComposePaneFraction);
         var pane = new Rect(new Vector2(area.Min.X, top), new Vector2(area.Max.X, top + paneHeight));
-        composeSession.DrawPickPane(pane, scale, ComposeStyle, ComposeAspect, ComposeAllowsReveal,
-            ComposeAllowsAspectChoice, !store.Posting);
+        composeSession.DrawPickPane(pane, scale, ComposeStyle, ComposeAspect, ComposeAllowsReveal, !store.Posting);
         var gridTop = pane.Max.Y + ComposeGridGap * scale;
+        if (ComposeAllowsAspectChoice && composeSession.ShowsAspectRail)
+        {
+            gridTop = composeSession.DrawAspectRail(area, pane.Max.Y, scale, ui, !store.Posting);
+        }
+
         if (composeSession.Notice.Length > 0)
         {
             var notice = Typography.FitText(composeSession.Notice, area.Width - CellPadX * 2f * scale,

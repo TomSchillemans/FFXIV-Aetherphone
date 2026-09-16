@@ -237,7 +237,7 @@ internal sealed class VelvetPostComposer
                 DrawCaption(area, ui, context);
                 break;
             default:
-                DrawPick(area);
+                DrawPick(area, ui);
                 break;
         }
 
@@ -269,7 +269,7 @@ internal sealed class VelvetPostComposer
         return RosePill(new Rect(min, max), label, enabled, ActionStyle);
     }
 
-    private void DrawPick(Rect area)
+    private void DrawPick(Rect area, AppSkin ui)
     {
         var scale = UiScale.Current;
         if (VHeader.Push(area, Title, HeaderActionSlots))
@@ -286,8 +286,13 @@ internal sealed class VelvetPostComposer
         var top = area.Min.Y + VHeader.Height * scale;
         var paneHeight = MathF.Min(area.Width, (area.Max.Y - top) * PaneFraction);
         var pane = new Rect(new Vector2(area.Min.X, top), new Vector2(area.Max.X, top + paneHeight));
-        session.DrawPickPane(pane, scale, Style, Aspect, AllowsReveal, !storyMode, !Posting);
+        session.DrawPickPane(pane, scale, Style, Aspect, AllowsReveal, !Posting);
         var gridTop = pane.Max.Y + GridGap * scale;
+        if (!storyMode && session.ShowsAspectRail)
+        {
+            gridTop = session.DrawAspectRail(area, pane.Max.Y, scale, ui, !Posting);
+        }
+
         if (session.Notice.Length > 0)
         {
             var notice = Typography.FitText(session.Notice, area.Width - BodySide * 2f * scale, TextStyles.Footnote);
