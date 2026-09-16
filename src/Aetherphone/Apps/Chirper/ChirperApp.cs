@@ -51,6 +51,7 @@ internal sealed partial class ChirperApp : IResumableApp
         Reactions,
         DeleteReply,
         RemoveReply,
+        BadgeProgress,
     }
 
     private enum ActionGlyph
@@ -446,6 +447,9 @@ internal sealed partial class ChirperApp : IResumableApp
                 break;
             case ChirperScreen.Hashtag:
                 DrawHashtag(area, route.Tag!);
+                break;
+            case ChirperScreen.BadgeProgress:
+                DrawBadgeProgress(area);
                 break;
             default:
                 DrawHome(area);

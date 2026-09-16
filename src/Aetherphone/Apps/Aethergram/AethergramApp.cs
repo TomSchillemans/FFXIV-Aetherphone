@@ -449,6 +449,9 @@ internal sealed partial class AethergramApp : IResumableApp
             case AethergramScreen.Activity:
                 DrawActivity(area);
                 break;
+            case AethergramScreen.BadgeProgress:
+                DrawBadgeProgress(area);
+                break;
             default:
                 DrawRoot(area);
                 break;
