@@ -30,7 +30,7 @@ internal static class BadgeProgressCard
     private static readonly TextStyle GoalLabelStyle = TextStyles.Footnote;
     private static readonly TextStyle GoalValueStyle = TextStyles.FootnoteEmphasized;
 
-    public static void Draw(BadgeProgressView? progress, SocialInk ink, bool light)
+    public static void Draw(BadgeProgressView? progress, SocialInk ink, bool light, string app)
     {
         if (progress is null || progress.Rows.Length == 0)
         {
@@ -55,17 +55,27 @@ internal static class BadgeProgressCard
         var goalHeight = goalLabelHeight + (BarGap + BarHeight) * scale;
         var openRowHeight = nameHeight + (GoalGap * scale + goalHeight) * 2f;
 
-        var panelHeight = PanelPadY * scale + titleHeight + TitleGap * scale + hintHeight + HeaderGap * scale;
+        var shown = 0;
+        var rowsHeight = 0f;
         for (var index = 0; index < progress.Rows.Length; index++)
         {
-            panelHeight += progress.Rows[index].Held ? nameHeight : openRowHeight;
-            if (index < progress.Rows.Length - 1)
+            var row = progress.Rows[index];
+            if (!Shows(row, app))
             {
-                panelHeight += RowGap * scale;
+                continue;
             }
+
+            rowsHeight += (shown > 0 ? RowGap * scale : 0f) + (row.Held ? nameHeight : openRowHeight);
+            shown++;
         }
 
-        panelHeight += PanelPadY * scale;
+        if (shown == 0)
+        {
+            return;
+        }
+
+        var panelHeight = PanelPadY * scale + titleHeight + TitleGap * scale + hintHeight + HeaderGap * scale
+            + rowsHeight + PanelPadY * scale;
         var panelMin = new Vector2(panelLeft, origin.Y);
         var panelMax = new Vector2(panelRight, origin.Y + panelHeight);
         var rounding = PanelRounding * scale;
@@ -79,9 +89,21 @@ internal static class BadgeProgressCard
         Typography.DrawWrappedLeft(new Vector2(left, cursorY), hint, ink.MutedInk, HintStyle, innerWidth);
         cursorY += hintHeight + HeaderGap * scale;
 
+        var drawn = 0;
         for (var index = 0; index < progress.Rows.Length; index++)
         {
             var row = progress.Rows[index];
+            if (!Shows(row, app))
+            {
+                continue;
+            }
+
+            if (drawn > 0)
+            {
+                cursorY += RowGap * scale;
+            }
+
+            drawn++;
             var badge = UserName.FindBadge(row.BadgeId);
             var accent = badge is null ? ink.Accent : RoleInk.For(badge.Colors[0], light);
             var glyphCenter = new Vector2(left + GlyphSize * scale * 0.5f, cursorY + nameHeight * 0.5f);
@@ -114,15 +136,15 @@ internal static class BadgeProgressCard
                 cursorY = DrawGoal(drawList, left, right, cursorY, Loc.T(L.Social.StatLikes), row.LikesText,
                     row.LikesFraction, accent, ink, scale, goalLabelHeight);
             }
-
-            if (index < progress.Rows.Length - 1)
-            {
-                cursorY += RowGap * scale;
-            }
         }
 
         ImGui.SetCursorScreenPos(origin);
         ImGui.Dummy(new Vector2(width, panelHeight + BottomMargin * scale));
+    }
+
+    private static bool Shows(in BadgeProgressRow row, string app)
+    {
+        return row.Key == app || row.Key == BadgeProgressView.AccountKey;
     }
 
     private static void DrawName(ImDrawListPtr drawList, BadgeStyle? badge, float left, float top, float limit,

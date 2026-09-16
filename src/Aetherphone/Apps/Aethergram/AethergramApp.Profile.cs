@@ -583,7 +583,7 @@ internal sealed partial class AethergramApp
         using (AppSurface.BeginEdgeToEdge(body))
         {
             ImGui.Dummy(new Vector2(0f, ProfileBlockGap * scale));
-            BadgeProgressCard.Draw(progress, Ink, RoleInk.IsLight(theme));
+            BadgeProgressCard.Draw(progress, Ink, RoleInk.IsLight(theme), Id);
         }
     }
 

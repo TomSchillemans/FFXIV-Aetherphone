@@ -4,6 +4,7 @@ using Aetherphone.Core.Localization;
 namespace Aetherphone.Core.Social;
 
 internal readonly record struct BadgeProgressRow(
+    string Key,
     string BadgeId,
     bool Held,
     float FollowersFraction,
@@ -13,6 +14,8 @@ internal readonly record struct BadgeProgressRow(
 
 internal sealed class BadgeProgressView
 {
+    public const string AccountKey = "account";
+
     public readonly BadgeProgressRow[] Rows;
 
     private readonly BadgeProgressDto source;
@@ -27,6 +30,7 @@ internal sealed class BadgeProgressView
         {
             var target = source.Targets[index];
             Rows[index] = new BadgeProgressRow(
+                target.Key,
                 target.BadgeId,
                 target.Held,
                 Fraction(target.Followers, target.RequiredFollowers),
