@@ -309,11 +309,8 @@ internal sealed partial class ChirperApp
         cursorX = DrawStat(drawList, cursorX, top, lineHeight, user.Following.ToString(Loc.Culture),
             Loc.T(L.Chirper.Following), listsOpen, right, out var followingClicked);
         cursorX += 18f * scale;
-        cursorX = DrawStat(drawList, cursorX, top, lineHeight, user.Followers.ToString(Loc.Culture),
+        DrawStat(drawList, cursorX, top, lineHeight, user.Followers.ToString(Loc.Culture),
             SocialProfilePages.FollowersLabel(user.Followers), listsOpen, right, out var followersClicked);
-        cursorX += 18f * scale;
-        DrawStat(drawList, cursorX, top, lineHeight, user.Likes.ToString(Loc.Culture), Loc.T(L.Social.StatLikes),
-            false, right, out _);
         if (followingClicked)
         {
             OpenUserList(user.Id, UserListKind.Following);

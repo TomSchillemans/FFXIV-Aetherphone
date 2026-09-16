@@ -78,8 +78,7 @@ internal sealed record UserDto(
     long CoinsDailyCap = 0,
     string FrameId = "",
     string? BioLang = null,
-    string? BannerUrl = null,
-    int Likes = 0) : IIdentified;
+    string? BannerUrl = null) : IIdentified;
 
 internal sealed record UpdateProfileRequest(string? DisplayName, string? Handle, string? Bio, string? AvatarUrl = null,
     string? BannerUrl = null);
@@ -399,8 +398,7 @@ internal sealed record VelvetProfileDto(
     int Presence = 0,
     VelvetCardPhotoDto[]? Photos = null,
     int RaceOverride = 0,
-    int Languages = 0,
-    int Likes = 0);
+    int Languages = 0);
 
 internal sealed record VelvetCardPhotoDto(string Id, string Url, int Width, int Height);
 

@@ -156,7 +156,7 @@ internal sealed partial class VelvetShell
             images, lodestone, -1, ring, frame);
         avatarLightbox.TryOpen(avatarCenter, radius, user.AvatarUrl, images);
 
-        var statCount = isMe ? 3 : 2;
+        var statCount = isMe ? 2 : 1;
         var statsLeft = avatarCenter.X + radius + frameReach + ProfileStatsGap * scale;
         var statsInline = StatsFitInline(innerRight - statsLeft, statCount, scale);
         var statsHeight = Typography.LineHeight(ProfileStatValueStyle)
@@ -201,9 +201,8 @@ internal sealed partial class VelvetShell
 
     private static bool StatsFitInline(float available, int count, float scale)
     {
-        var widest = MathF.Max(Typography.Measure(Loc.T(L.Velvet.Posts), ProfileStatLabelStyle).X,
-            Typography.Measure(Loc.T(L.Social.StatLikes), ProfileStatLabelStyle).X);
-        if (count > 2)
+        var widest = Typography.Measure(Loc.T(L.Velvet.Posts), ProfileStatLabelStyle).X;
+        if (count > 1)
         {
             widest = MathF.Max(widest,
                 Typography.Measure(Loc.T(L.Velvet.ProfileConnections), ProfileStatLabelStyle).X);
@@ -221,13 +220,12 @@ internal sealed partial class VelvetShell
         var valueHeight = Typography.LineHeight(ProfileStatValueStyle);
         var top = centerY - (valueHeight + Typography.LineHeight(ProfileStatLabelStyle)) * 0.5f;
         DrawProfileStat(drawList, left, top, column, valueHeight, postCount, Loc.T(L.Velvet.Posts));
-        DrawProfileStat(drawList, left + column, top, column, valueHeight, user.Likes, Loc.T(L.Social.StatLikes));
-        if (count < 3)
+        if (count < 2)
         {
             return;
         }
 
-        DrawProfileStat(drawList, left + column * 2f, top, column, valueHeight, store.Connections.Length,
+        DrawProfileStat(drawList, left + column, top, column, valueHeight, store.Connections.Length,
             Loc.T(L.Velvet.ProfileConnections));
     }
 

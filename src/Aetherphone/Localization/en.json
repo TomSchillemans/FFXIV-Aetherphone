@@ -5192,7 +5192,6 @@
   "changelog.sectionChirperAethergramVelvet": "Chirper, Aethergram and Velvet",
   "changelog.r1033.0": "Rewrote the community rules to be shorter: they now list what must be marked sensitive and what is not allowed",
   "changelog.r1033.1": "Added a Badge progress page under More on your own profile: your followers and likes against that app's badge and Verified",
-  "changelog.r1033.2": "Added a Likes count to profiles: the reactions a person's posts have received in that app",
   "changelog.r1033.3": "Added an AI Usage block to the community rules: content made by generative AI is not allowed",
   "changelog.r1033.4": "Moved the photo shape choice when posting into a labeled row under the preview, so Square, Portrait and Landscape are one tap away",
   "changelog.r1033.5": "Added Show sensitive grams to the feed filters: turn it off to keep grams marked sensitive out of your feeds",
