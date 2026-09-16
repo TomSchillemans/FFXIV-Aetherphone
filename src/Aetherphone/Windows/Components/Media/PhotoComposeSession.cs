@@ -7,7 +7,6 @@ using Aetherphone.Core.Platform;
 using Aetherphone.Core.Theme;
 using Aetherphone.Core.Wallpapers;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface;
 using Dalamud.Interface.Textures.TextureWraps;
 
 namespace Aetherphone.Windows.Components;
@@ -47,9 +46,8 @@ internal sealed class PhotoComposeSession : IDisposable
     private const float GridGap = 6f;
     private const float GridOverscan = 60f;
     private const float TileRounding = 10f;
-    private const float AspectButtonRadius = 17f;
-    private const float AspectButtonInset = 12f;
-    private const float AspectIconScale = 0.8f;
+    private const float AspectRailGap = 10f;
+    private const float AspectRailSide = 16f;
     private const float EmptyIconSize = 34f;
     private const float EmptyTextGap = 12f;
     private const float ImportIconSize = 26f;
@@ -64,8 +62,6 @@ internal sealed class PhotoComposeSession : IDisposable
 
     private static readonly Vector4 White = new(1f, 1f, 1f, 1f);
     private static readonly Vector4 WhiteRing = new(1f, 1f, 1f, 0.9f);
-    private static readonly Vector4 Scrim = new(0f, 0f, 0f, 0.55f);
-    private static readonly Vector4 ScrimHover = new(0.12f, 0.12f, 0.12f, 0.7f);
     private static readonly Vector4 HoverWash = new(1f, 1f, 1f, 0.1f);
     private static readonly PhotoEditTool[] Tools = { PhotoEditTool.Looks, PhotoEditTool.Adjust };
 
@@ -89,6 +85,9 @@ internal sealed class PhotoComposeSession : IDisposable
     private bool cropDragging;
     private Vector2 cropLastDrag;
     private readonly PhotoEditControls editControls = new();
+    private readonly ChipRail aspectRail = new();
+    private readonly string[] aspectLabels = new string[PostAspects.All.Length];
+    private readonly bool[] aspectActive = new bool[PostAspects.All.Length];
 
     public PhotoComposeSession(PhotoLibrary library, WallpaperImageCache wallpaperImages)
     {
@@ -244,13 +243,6 @@ internal sealed class PhotoComposeSession : IDisposable
 
         Notice = string.Empty;
         Append(path);
-    }
-
-    public void CycleAspect()
-    {
-        var all = PostAspects.All;
-        var index = Array.IndexOf(all, Aspect);
-        Aspect = all[(index + 1) % all.Length];
     }
 
     public void BeginEdit()
@@ -438,7 +430,7 @@ internal sealed class PhotoComposeSession : IDisposable
     }
 
     public void DrawPickPane(Rect pane, float scale, in PhotoComposeStyle style, float aspect, bool allowReveal,
-        bool allowAspectChoice, bool interactive)
+        bool interactive)
     {
         var drawList = ImGui.GetWindowDrawList();
         drawList.AddRectFilled(pane.Min, pane.Max, ImGui.GetColorU32(style.PlaceholderFill));
@@ -451,10 +443,31 @@ internal sealed class PhotoComposeSession : IDisposable
 
         var preview = ImageFit.CenteredRect(pane, aspect);
         DrawFramedPhoto(drawList, preview, texture, aspect, allowReveal, 0f, interactive && !GifSelected);
-        if (allowAspectChoice && !GifSelected)
+    }
+
+    public bool ShowsAspectRail => !GifSelected;
+
+    public float DrawAspectRail(Rect area, float top, float scale, AppSkin ui, bool interactive)
+    {
+        var aspects = PostAspects.All;
+        for (var index = 0; index < aspects.Length; index++)
         {
-            DrawAspectButton(drawList, pane, scale, interactive);
+            aspectLabels[index] = Loc.T(AspectLabels.For(aspects[index]));
+            aspectActive[index] = aspects[index] == Aspect;
         }
+
+        var gap = AspectRailGap * scale;
+        var side = AspectRailSide * scale;
+        var row = new Rect(new Vector2(area.Min.X + side, top + gap),
+            new Vector2(area.Max.X - side, top + gap + ChipRail.RowHeight * scale));
+        var picked = aspectRail.Draw(row, ui, aspectLabels, aspectActive, labelPadding: ChipRail.CompactLabelPadding,
+            centered: true, interactive: interactive);
+        if (picked >= 0)
+        {
+            Aspect = aspects[picked];
+        }
+
+        return row.Max.Y + gap;
     }
 
     private void DrawPaneEmpty(ImDrawListPtr drawList, Rect pane, float scale, in PhotoComposeStyle style)
@@ -474,27 +487,6 @@ internal sealed class PhotoComposeSession : IDisposable
         Typography.DrawCentered(drawList,
             new Vector2(pane.Center.X, blockTop + iconSize + EmptyTextGap * scale + textHeight * 0.5f),
             Loc.T(L.Social.ComposeChoosePhoto), style.MutedInk, TextStyles.Subheadline);
-    }
-
-    private void DrawAspectButton(ImDrawListPtr drawList, Rect pane, float scale, bool interactive)
-    {
-        var radius = AspectButtonRadius * scale;
-        var inset = AspectButtonInset * scale;
-        var center = new Vector2(pane.Min.X + inset + radius, pane.Max.Y - inset - radius);
-        var hit = new Vector2(radius, radius);
-        var hovered = interactive && UiInteract.Hover(center - hit, center + hit);
-        drawList.AddCircleFilled(center, radius, ImGui.GetColorU32(hovered ? ScrimHover : Scrim), CircleSegments);
-        AppSkin.Icon(drawList, center, IconGlyph.Of(FontAwesomeIcon.Expand), White, AspectIconScale);
-        HoverTooltip.Show(new Rect(center - hit, center + hit), Loc.T(AspectLabels.For(Aspect)));
-        if (hovered)
-        {
-            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-        }
-
-        if (UiInteract.Click(center - hit, center + hit, hovered))
-        {
-            CycleAspect();
-        }
     }
 
     public void DrawPickGrid(Rect gridRect, float scale, in PhotoComposeStyle style, bool showBadges,
