@@ -29,7 +29,7 @@ internal static class ConductRules
     public static readonly ConductGate Chirper = new()
     {
         AppId = "chirper",
-        Version = 3,
+        Version = 4,
         Icon = FontAwesomeIcon.Comments,
         Title = L.Conduct.ChirperTitle,
         Intro = L.Conduct.ChirperIntro,
@@ -37,8 +37,10 @@ internal static class ConductRules
         {
             new ConductSection(ConductTone.Encouraged, L.Conduct.ChirperAllowedTitle, L.Conduct.ChirperAllowedLead,
                 L.Conduct.ChirperAllowedItems),
-            new ConductSection(ConductTone.Restricted, L.Conduct.ChirperAppropriateTitle,
-                L.Conduct.ChirperAppropriateLead, L.Conduct.ChirperAppropriateItems, FontAwesomeIcon.EyeSlash),
+            new ConductSection(ConductTone.Neutral, L.Conduct.ChirperSfwTitle, L.Conduct.ChirperSfwLead,
+                L.Conduct.ChirperSfwItems, FontAwesomeIcon.EyeSlash),
+            new ConductSection(ConductTone.Prohibited, L.Conduct.ChirperNotAllowedTitle, null,
+                L.Conduct.ChirperNotAllowedItems),
             new ConductSection(ConductTone.Restricted, L.Conduct.ChirperRespectTitle, L.Conduct.ChirperRespectLead,
                 L.Conduct.ChirperRespectItems, FontAwesomeIcon.Handshake),
             new ConductSection(ConductTone.Restricted, L.Conduct.ChirperSpamTitle, L.Conduct.ChirperSpamLead,
@@ -47,17 +49,19 @@ internal static class ConductRules
                 Array.Empty<LocString>(), FontAwesomeIcon.Lock),
             new ConductSection(ConductTone.Restricted, L.Conduct.ChirperCreatorsTitle, L.Conduct.ChirperCreatorsLead,
                 L.Conduct.ChirperCreatorsItems, FontAwesomeIcon.Copyright),
+            new ConductSection(ConductTone.Prohibited, L.Conduct.ChirperAiTitle, L.Conduct.ChirperAiBody,
+                Array.Empty<LocString>(), FontAwesomeIcon.Robot),
             new ConductSection(ConductTone.Prohibited, L.Conduct.ChirperChildSafetyTitle,
                 L.Conduct.ChirperChildSafetyBody, Array.Empty<LocString>(), FontAwesomeIcon.Child),
-            new ConductSection(ConductTone.Neutral, L.Conduct.ChirperDiscretionTitle, L.Conduct.ChirperDiscretionBody,
-                Array.Empty<LocString>(), FontAwesomeIcon.Gavel),
+            new ConductSection(ConductTone.Neutral, L.Conduct.ChirperAppealsTitle, L.Conduct.ChirperAppealsBody,
+                Array.Empty<LocString>(), FontAwesomeIcon.TicketAlt),
         },
     };
 
     public static readonly ConductGate Aethergram = new()
     {
         AppId = "aethergram",
-        Version = 3,
+        Version = 4,
         Icon = FontAwesomeIcon.Camera,
         Title = L.Conduct.AethergramTitle,
         Intro = L.Conduct.AethergramIntro,
@@ -65,10 +69,10 @@ internal static class ConductRules
         {
             new ConductSection(ConductTone.Encouraged, L.Conduct.AethergramAllowedTitle,
                 L.Conduct.AethergramAllowedLead, L.Conduct.AethergramAllowedItems),
-            new ConductSection(ConductTone.Restricted, L.Conduct.AethergramSfwTitle, L.Conduct.AethergramSfwLead,
+            new ConductSection(ConductTone.Neutral, L.Conduct.AethergramSfwTitle, L.Conduct.AethergramSfwLead,
                 L.Conduct.AethergramSfwItems, FontAwesomeIcon.EyeSlash),
-            new ConductSection(ConductTone.Neutral, L.Conduct.AethergramContextTitle, L.Conduct.AethergramContextLead,
-                L.Conduct.AethergramContextItems, FontAwesomeIcon.Camera),
+            new ConductSection(ConductTone.Prohibited, L.Conduct.AethergramNotAllowedTitle, null,
+                L.Conduct.AethergramNotAllowedItems),
             new ConductSection(ConductTone.Prohibited, L.Conduct.AethergramChildlikeTitle,
                 L.Conduct.AethergramChildlikeBody, Array.Empty<LocString>(), FontAwesomeIcon.Child),
             new ConductSection(ConductTone.Restricted, L.Conduct.AethergramIrlTitle, L.Conduct.AethergramIrlBody,
@@ -81,8 +85,10 @@ internal static class ConductRules
                 Array.Empty<LocString>(), FontAwesomeIcon.Lock),
             new ConductSection(ConductTone.Restricted, L.Conduct.AethergramCreatorsTitle,
                 L.Conduct.AethergramCreatorsLead, L.Conduct.AethergramCreatorsItems, FontAwesomeIcon.Copyright),
-            new ConductSection(ConductTone.Neutral, L.Conduct.AethergramDiscretionTitle,
-                L.Conduct.AethergramDiscretionBody, Array.Empty<LocString>(), FontAwesomeIcon.Gavel),
+            new ConductSection(ConductTone.Prohibited, L.Conduct.AethergramAiTitle, L.Conduct.AethergramAiBody,
+                Array.Empty<LocString>(), FontAwesomeIcon.Robot),
+            new ConductSection(ConductTone.Neutral, L.Conduct.AethergramAppealsTitle, L.Conduct.AethergramAppealsBody,
+                Array.Empty<LocString>(), FontAwesomeIcon.TicketAlt),
         },
     };
 
