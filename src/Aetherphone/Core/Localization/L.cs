@@ -1767,14 +1767,14 @@ internal static class L
         {
             new("changelog.r1033.0",
                 "Rewrote the community rules to be shorter: they now list what must be marked sensitive and what is not allowed"),
+            new("changelog.r1033.2",
+                "Added a Likes count to profiles: the reactions a person's posts have received in that app"),
             new("changelog.r1033.1",
                 "Added a Badge progress page under More on your own profile: your followers and likes against that app's badge and Verified"),
         };
 
         public static readonly LocString[] Release1033ChirperAethergramVelvet =
         {
-            new("changelog.r1033.2",
-                "Added a Likes count to profiles: the reactions a person's posts have received in that app"),
             new("changelog.r1033.3",
                 "Added an AI Usage block to the community rules: content made by generative AI is not allowed"),
         };
