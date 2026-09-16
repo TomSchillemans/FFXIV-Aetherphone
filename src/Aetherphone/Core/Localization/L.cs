@@ -139,6 +139,11 @@ internal static class L
         public static readonly LocString Requested = new("social.requested", "Requested");
         public static readonly LocString Confirm = new("social.confirm", "Confirm");
         public static readonly LocString Delete = new("social.delete", "Delete");
+        public static readonly LocString StatLikes = new("social.statLikes", "Likes");
+        public static readonly LocString BadgeProgress = new("social.badgeProgress", "Badge progress");
+        public static readonly LocString BadgeProgressHint = new("social.badgeProgressHint", "Reach both goals to earn the badge.");
+        public static readonly LocString BadgeEarned = new("social.badgeEarned", "Earned");
+        public static readonly LocString BadgeGoalFollowers = new("social.badgeGoalFollowers", "Followers");
     }
 
     internal static class PhotoTag

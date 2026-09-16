@@ -26,6 +26,7 @@ internal abstract class SocialFeedStore : IDisposable
 {
     private const int CommentImageDimension = 1280;
     private const string CommentUploadScope = "comment";
+    private const long BadgeProgressRefreshMilliseconds = 60_000;
 
     protected readonly AethernetSession session;
     protected readonly AccountClient account;
@@ -93,6 +94,9 @@ internal abstract class SocialFeedStore : IDisposable
     private volatile string? feedRegions;
     private volatile bool feedIncludesSensitive = true;
     private string? lastAccountId;
+    private volatile BadgeProgressView? badgeProgress;
+    private long badgeProgressAttemptTick;
+    private volatile bool badgeProgressLoading;
 
     protected SocialFeedStore(
         AethernetSession session,
@@ -153,6 +157,8 @@ internal abstract class SocialFeedStore : IDisposable
         profileUser = null;
         profileLoading = false;
         profileFailed = false;
+        badgeProgress = null;
+        badgeProgressAttemptTick = 0;
         detailPostId = null;
         detailComments = Array.Empty<CommentDto>();
         commentsCursor = null;
@@ -301,6 +307,27 @@ internal abstract class SocialFeedStore : IDisposable
     public bool ProfileLoadingMore => profileLane.LoadingMore;
     public bool HasMoreProfilePosts => profileLane.HasMore;
     public bool ProfileFailed => profileFailed;
+
+    public BadgeProgressView? BadgeProgress
+    {
+        get
+        {
+            var view = badgeProgress;
+            if (view is null)
+            {
+                return null;
+            }
+
+            var current = view.ForCurrentLanguage();
+            if (!ReferenceEquals(current, view))
+            {
+                badgeProgress = current;
+            }
+
+            return current;
+        }
+    }
+
     public PostDto? DetailPost => detailPost;
     public CommentDto[] DetailComments => detailComments;
     public bool HasMoreComments => commentsCursor is not null;
@@ -1345,6 +1372,32 @@ internal abstract class SocialFeedStore : IDisposable
 
         profileUserId = null;
         OpenProfile(current);
+    }
+
+    public void EnsureBadgeProgress()
+    {
+        if (!session.IsSignedIn || badgeProgressLoading)
+        {
+            return;
+        }
+
+        var now = Environment.TickCount64;
+        var lastAttempt = Interlocked.Read(ref badgeProgressAttemptTick);
+        if (lastAttempt != 0 && now - lastAttempt < BadgeProgressRefreshMilliseconds)
+        {
+            return;
+        }
+
+        Interlocked.Exchange(ref badgeProgressAttemptTick, now);
+        badgeProgressLoading = true;
+        work.Run("badge progress", async token =>
+        {
+            var progress = await account.BadgeProgressAsync(token).ConfigureAwait(false);
+            if (progress is not null)
+            {
+                badgeProgress = BadgeProgressView.From(progress);
+            }
+        }, () => badgeProgressLoading = false);
     }
 
     public void EnsureUserList(string sourceId, UserListKind kind)

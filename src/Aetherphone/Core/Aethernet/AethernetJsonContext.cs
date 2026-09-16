@@ -163,6 +163,8 @@ namespace Aetherphone.Core.Aethernet;
 [JsonSerializable(typeof(BadgeDescriptorDto))]
 [JsonSerializable(typeof(BadgeCatalogDto))]
 [JsonSerializable(typeof(AwardedBadgesDto))]
+[JsonSerializable(typeof(BadgeProgressTargetDto))]
+[JsonSerializable(typeof(BadgeProgressDto))]
 [JsonSerializable(typeof(FrameDescriptorDto))]
 [JsonSerializable(typeof(FrameCatalogDto))]
 [JsonSerializable(typeof(InventoryItemDto))]
