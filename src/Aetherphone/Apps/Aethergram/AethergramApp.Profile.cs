@@ -30,6 +30,7 @@ internal sealed partial class AethergramApp
     private const float ProfileHeadTop = 12f;
     private const float ProfileStatsGap = 18f;
     private const float ProfileStatColumnPad = 10f;
+    private const float ProfileStatCount = 4f;
     private const float ProfileBlockGap = 10f;
     private const float ProfileChipHeight = SocialChrome.MetaChipHeight;
     private const float ProfileButtonGap = 6f;
@@ -175,6 +176,12 @@ internal sealed partial class AethergramApp
                 return;
             }
 
+            if (user.IsMe)
+            {
+                store.EnsureBadgeProgress();
+                BadgeProgressCard.Draw(store.BadgeProgress, Ink, RoleInk.IsLight(theme));
+            }
+
             DrawProfileTabs();
             if (profileTab == 0)
             {
@@ -314,16 +321,18 @@ internal sealed partial class AethergramApp
 
     private static bool StatsFitInline(float available, float scale)
     {
-        var widest = MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatPosts), ProfileStatLabelStyle).X,
+        var widest = MathF.Max(
+            MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatPosts), ProfileStatLabelStyle).X,
+                Typography.Measure(Loc.T(L.Social.StatLikes), ProfileStatLabelStyle).X),
             MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatFollowers), ProfileStatLabelStyle).X,
                 Typography.Measure(Loc.T(L.Aethergram.StatFollowing), ProfileStatLabelStyle).X));
-        return (widest + ProfileStatColumnPad * scale) * 3f <= available;
+        return (widest + ProfileStatColumnPad * scale) * ProfileStatCount <= available;
     }
 
     private void DrawProfileStats(ImDrawListPtr drawList, UserDto user, float left, float right, float centerY)
     {
         var scale = UiScale.Current;
-        var column = MathF.Max(1f, (right - left) / 3f);
+        var column = MathF.Max(1f, (right - left) / ProfileStatCount);
         var valueHeight = Typography.LineHeight(ProfileStatValueStyle);
         var labelHeight = Typography.LineHeight(ProfileStatLabelStyle);
         var top = centerY - (valueHeight + labelHeight) * 0.5f;
@@ -340,6 +349,9 @@ internal sealed partial class AethergramApp
         {
             OpenUserList(user.Id, UserListKind.Following);
         }
+
+        DrawProfileStat(drawList, left + column * 3f, top, column, valueHeight, user.Likes,
+            Loc.T(L.Social.StatLikes), false);
     }
 
     private static bool DrawProfileStat(ImDrawListPtr drawList, float left, float top, float width, float valueHeight,

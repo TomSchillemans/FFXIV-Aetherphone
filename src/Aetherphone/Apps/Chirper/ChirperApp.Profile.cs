@@ -77,6 +77,12 @@ internal sealed partial class ChirperApp
         {
             DrawProfileBanner(user, root);
             DrawProfileIdentity(user);
+            if (user.IsMe)
+            {
+                store.EnsureBadgeProgress();
+                BadgeProgressCard.Draw(store.BadgeProgress, ChirperInk.Shared, RoleInk.IsLight(theme));
+            }
+
             DrawProfileTabs(user.IsMe);
             switch (profileTab)
             {
@@ -309,8 +315,11 @@ internal sealed partial class ChirperApp
         cursorX = DrawStat(drawList, cursorX, top, lineHeight, user.Following.ToString(Loc.Culture),
             Loc.T(L.Chirper.Following), listsOpen, right, out var followingClicked);
         cursorX += 18f * scale;
-        DrawStat(drawList, cursorX, top, lineHeight, user.Followers.ToString(Loc.Culture),
+        cursorX = DrawStat(drawList, cursorX, top, lineHeight, user.Followers.ToString(Loc.Culture),
             SocialProfilePages.FollowersLabel(user.Followers), listsOpen, right, out var followersClicked);
+        cursorX += 18f * scale;
+        DrawStat(drawList, cursorX, top, lineHeight, user.Likes.ToString(Loc.Culture), Loc.T(L.Social.StatLikes),
+            false, right, out _);
         if (followingClicked)
         {
             OpenUserList(user.Id, UserListKind.Following);
