@@ -31,7 +31,7 @@ internal sealed partial class AethergramApp
     private const float ProfileHeadTop = 12f;
     private const float ProfileStatsGap = 18f;
     private const float ProfileStatColumnPad = 10f;
-    private const float ProfileStatCount = 4f;
+    private const float ProfileStatCount = 3f;
     private const float ProfileBlockGap = 10f;
     private const float ProfileChipHeight = SocialChrome.MetaChipHeight;
     private const float ProfileButtonGap = 6f;
@@ -316,9 +316,7 @@ internal sealed partial class AethergramApp
 
     private static bool StatsFitInline(float available, float scale)
     {
-        var widest = MathF.Max(
-            MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatPosts), ProfileStatLabelStyle).X,
-                Typography.Measure(Loc.T(L.Social.StatLikes), ProfileStatLabelStyle).X),
+        var widest = MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatPosts), ProfileStatLabelStyle).X,
             MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatFollowers), ProfileStatLabelStyle).X,
                 Typography.Measure(Loc.T(L.Aethergram.StatFollowing), ProfileStatLabelStyle).X));
         return (widest + ProfileStatColumnPad * scale) * ProfileStatCount <= available;
@@ -344,9 +342,6 @@ internal sealed partial class AethergramApp
         {
             OpenUserList(user.Id, UserListKind.Following);
         }
-
-        DrawProfileStat(drawList, left + column * 3f, top, column, valueHeight, user.Likes,
-            Loc.T(L.Social.StatLikes), false);
     }
 
     private static bool DrawProfileStat(ImDrawListPtr drawList, float left, float top, float width, float valueHeight,
