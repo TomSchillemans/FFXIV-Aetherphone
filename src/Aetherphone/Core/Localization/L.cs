@@ -7295,8 +7295,10 @@ internal static class L
             new("conduct.velvet.creators.1", "Post stolen or leaked content"),
             new("conduct.velvet.creators.2", "Remove watermarks or repost commissioned work without permission"),
             new("conduct.velvet.creators.3", "Claim someone else's creations as your own"),
-            new("conduct.velvet.creators.4", "Post AI-generated content"),
         };
+        public static readonly LocString VelvetAiTitle = new("conduct.velvet.ai.title", "AI Usage");
+        public static readonly LocString VelvetAiBody = new("conduct.velvet.ai.body", "We do not allow any content made by generative AI.");
+        public static readonly LocString VelvetRemovalAppeal = new("conduct.velvet.removalAppeal", "If you believe your content was wrongfully removed, please contact support through a ticket on the Discord.");
         public static readonly LocString VelvetSpamTitle = new("conduct.velvet.spam.title", "No Spam or Scams");
         public static readonly LocString VelvetSpamLead = new("conduct.velvet.spam.lead", "Keep the feed worth browsing. Do not post:");
         public static readonly LocString[] VelvetSpamItems =

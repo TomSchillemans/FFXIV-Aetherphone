@@ -65,7 +65,7 @@ internal static class ConductRules
     public static readonly ConductGate Velvet = new()
     {
         AppId = "velvet",
-        Version = 3,
+        Version = 4,
         Icon = FontAwesomeIcon.Heart,
         Title = L.Conduct.VelvetTitle,
         Intro = L.Conduct.VelvetIntro,
@@ -87,6 +87,8 @@ internal static class ConductRules
                 L.Conduct.VelvetPrivacyItems, FontAwesomeIcon.Lock),
             new ConductSection(ConductTone.Restricted, L.Conduct.VelvetCreatorsTitle, L.Conduct.VelvetCreatorsLead,
                 L.Conduct.VelvetCreatorsItems, FontAwesomeIcon.Copyright),
+            new ConductSection(ConductTone.Prohibited, L.Conduct.VelvetAiTitle, L.Conduct.VelvetAiBody,
+                Array.Empty<LocString>(), FontAwesomeIcon.Robot, L.Conduct.VelvetRemovalAppeal),
             new ConductSection(ConductTone.Restricted, L.Conduct.VelvetSpamTitle, L.Conduct.VelvetSpamLead,
                 L.Conduct.VelvetSpamItems, FontAwesomeIcon.Bullhorn),
             new ConductSection(ConductTone.Restricted, L.Conduct.VelvetRespectTitle, L.Conduct.VelvetRespectLead,
