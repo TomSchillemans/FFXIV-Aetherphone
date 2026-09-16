@@ -7186,16 +7186,27 @@ internal static class L
             new("conduct.chirper.allowed.4", "Glamour, screenshots, and achievements"),
             new("conduct.chirper.allowed.5", "Humor and memes"),
         };
-        public static readonly LocString ChirperAppropriateTitle = new("conduct.chirper.appropriate.title", "Keep It Appropriate");
-        public static readonly LocString ChirperAppropriateLead = new("conduct.chirper.appropriate.lead", "Chirper is a public community platform. Do not post or promote:");
-        public static readonly LocString[] ChirperAppropriateItems =
+        public static readonly LocString ChirperSfwTitle = new("conduct.chirper.sfw.title", "Keep It SFW");
+        public static readonly LocString ChirperSfwLead = new("conduct.chirper.sfw.lead", "Chirper is a safe-for-work platform. Anything that could be considered more than that should be veiled by marking it sensitive. What should be veiled?");
+        public static readonly LocString[] ChirperSfwItems =
         {
-            new("conduct.chirper.appropriate.1", "Explicit sexual content or nudity"),
-            new("conduct.chirper.appropriate.2", "ERP advertisements or sexual solicitation"),
-            new("conduct.chirper.appropriate.3", "Fetish content"),
-            new("conduct.chirper.appropriate.4", "Graphic sexual language intended for arousal"),
-            new("conduct.chirper.appropriate.5", "Nano bikinis or similar micro-coverage outfits"),
-            new("conduct.chirper.appropriate.6", "See-through or sheer clothing that shows nipples or genitals"),
+            new("conduct.chirper.sfw.1", "Sexually suggestive content"),
+            new("conduct.chirper.sfw.2", "Implied nudity"),
+            new("conduct.chirper.sfw.3", "Presenting or suggestive poses"),
+            new("conduct.chirper.sfw.4", "Pictures with the focus on private or sensitive areas"),
+            new("conduct.chirper.sfw.5", "Lingerie, micro bikinis, and similar outfits"),
+            new("conduct.chirper.sfw.6", "Sexual hashtags and innuendos"),
+            new("conduct.chirper.sfw.7", "Visible areola"),
+        };
+        public static readonly LocString ChirperNotAllowedTitle = new("conduct.chirper.notAllowed.title", "What Is Not Allowed");
+        public static readonly LocString[] ChirperNotAllowedItems =
+        {
+            new("conduct.chirper.notAllowed.1", "Nudity"),
+            new("conduct.chirper.notAllowed.2", "ERP or sexual solicitation"),
+            new("conduct.chirper.notAllowed.3", "Fetish content, such as BDSM"),
+            new("conduct.chirper.notAllowed.4", "Graphic violence or gore"),
+            new("conduct.chirper.notAllowed.5", "Genitalia or femme-presenting nipples"),
+            new("conduct.chirper.notAllowed.6", "Content that would ordinarily be on Velvet"),
         };
         public static readonly LocString ChirperRespectTitle = new("conduct.chirper.respect.title", "Be Respectful");
         public static readonly LocString ChirperRespectLead = new("conduct.chirper.respect.lead", "Treat others with respect. Do not engage in:");
@@ -7222,37 +7233,39 @@ internal static class L
             new("conduct.chirper.creators.1", "Post stolen or leaked content"),
             new("conduct.chirper.creators.2", "Remove watermarks or repost commissioned work without permission"),
             new("conduct.chirper.creators.3", "Claim someone else's creations as your own"),
-            new("conduct.chirper.creators.4", "Post AI-generated content"),
         };
         public static readonly LocString ChirperPrivacyTitle = new("conduct.chirper.privacy.title", "Protect Privacy");
         public static readonly LocString ChirperPrivacyBody = new("conduct.chirper.privacy.body", "Do not share another person's personal information, private conversations, or confidential content without their permission.");
         public static readonly LocString ChirperChildSafetyTitle = new("conduct.chirper.childSafety.title", "Child Safety");
         public static readonly LocString ChirperChildSafetyBody = new("conduct.chirper.childSafety.body", "Any content involving or sexualizing child-like characters or minors is strictly prohibited, regardless of lore or stated age.");
-        public static readonly LocString ChirperDiscretionTitle = new("conduct.chirper.discretion.title", "Moderator Discretion");
-        public static readonly LocString ChirperDiscretionBody = new("conduct.chirper.discretion.body", "Posts that are excessively suggestive, disruptive, or otherwise inappropriate for a public community may be removed at moderator discretion.");
+        public static readonly LocString ChirperAiTitle = new("conduct.chirper.ai.title", "AI Usage");
+        public static readonly LocString ChirperAiBody = new("conduct.chirper.ai.body", "We do not allow any content made by generative AI.");
+        public static readonly LocString ChirperAppealsTitle = new("conduct.chirper.appeals.title", "Appeals");
+        public static readonly LocString ChirperAppealsBody = new("conduct.chirper.appeals.body", "If you believe your content was wrongfully removed, please contact support through a ticket on our Discord server.");
 
         public static readonly LocString AethergramTitle = new("conduct.aethergram.title", "Aethergram Community Rules");
         public static readonly LocString AethergramIntro = new("conduct.aethergram.intro", "Before you start sharing photos, please read the rules of the community.");
         public static readonly LocString AethergramSfwTitle = new("conduct.aethergram.sfw.title", "Keep It SFW");
-        public static readonly LocString AethergramSfwLead = new("conduct.aethergram.sfw.lead", "Aethergram is a safe-for-work platform. Do not post or promote:");
+        public static readonly LocString AethergramSfwLead = new("conduct.aethergram.sfw.lead", "Aethergram is a safe-for-work platform. Anything that could be considered more than that should be veiled by marking it sensitive. What should be veiled?");
         public static readonly LocString[] AethergramSfwItems =
         {
-            new("conduct.aethergram.sfw.1", "Nudity or explicit sexual content"),
-            new("conduct.aethergram.sfw.2", "Sexually suggestive images, poses, or captions"),
-            new("conduct.aethergram.sfw.3", "ERP advertisements or sexual solicitation"),
-            new("conduct.aethergram.sfw.4", "Fetish content"),
-            new("conduct.aethergram.sfw.5", "Explicit sexual language in posts, profiles, or comments"),
-            new("conduct.aethergram.sfw.6", "Graphic violence or gore"),
-            new("conduct.aethergram.sfw.7", "Nano bikinis or similar micro-coverage outfits"),
-            new("conduct.aethergram.sfw.8", "See-through or sheer clothing that shows nipples or genitals"),
+            new("conduct.aethergram.sfw.1", "Sexually suggestive content"),
+            new("conduct.aethergram.sfw.2", "Implied nudity"),
+            new("conduct.aethergram.sfw.3", "Presenting or suggestive poses"),
+            new("conduct.aethergram.sfw.4", "Pictures with the focus on private or sensitive areas"),
+            new("conduct.aethergram.sfw.5", "Lingerie, micro bikinis, and similar outfits"),
+            new("conduct.aethergram.sfw.6", "Sexual hashtags and innuendos"),
+            new("conduct.aethergram.sfw.7", "Visible areola"),
         };
-        public static readonly LocString AethergramContextTitle = new("conduct.aethergram.context.title", "Context Matters");
-        public static readonly LocString AethergramContextLead = new("conduct.aethergram.context.lead", "Some content may be reviewed based on presentation, including:");
-        public static readonly LocString[] AethergramContextItems =
+        public static readonly LocString AethergramNotAllowedTitle = new("conduct.aethergram.notAllowed.title", "What Is Not Allowed");
+        public static readonly LocString[] AethergramNotAllowedItems =
         {
-            new("conduct.aethergram.context.1", "Swimwear or lingerie"),
-            new("conduct.aethergram.context.2", "Romantic or intimate poses"),
-            new("conduct.aethergram.context.3", "Suggestive camera angles or captions"),
+            new("conduct.aethergram.notAllowed.1", "Nudity"),
+            new("conduct.aethergram.notAllowed.2", "ERP or sexual solicitation"),
+            new("conduct.aethergram.notAllowed.3", "Fetish content, such as BDSM"),
+            new("conduct.aethergram.notAllowed.4", "Graphic violence or gore"),
+            new("conduct.aethergram.notAllowed.5", "Genitalia or femme-presenting nipples"),
+            new("conduct.aethergram.notAllowed.6", "Content that would ordinarily be on Velvet"),
         };
         public static readonly LocString AethergramChildlikeTitle = new("conduct.aethergram.childlike.title", "Child-like Characters");
         public static readonly LocString AethergramChildlikeBody = new("conduct.aethergram.childlike.body", "Any content that sexualizes characters with child-like appearances or proportions is strictly prohibited, regardless of lore or stated age. Kitten Modded characters are not allowed.");
@@ -7299,10 +7312,11 @@ internal static class L
             new("conduct.aethergram.creators.1", "Post stolen or leaked content"),
             new("conduct.aethergram.creators.2", "Remove watermarks or repost commissioned work without permission"),
             new("conduct.aethergram.creators.3", "Claim someone else's creations as your own"),
-            new("conduct.aethergram.creators.4", "Post AI-generated content"),
         };
-        public static readonly LocString AethergramDiscretionTitle = new("conduct.aethergram.discretion.title", "Moderator Discretion");
-        public static readonly LocString AethergramDiscretionBody = new("conduct.aethergram.discretion.body", "Moderators will consider the overall context and intent. Content that appears intended to be sexually suggestive or otherwise inappropriate for a safe-for-work platform may be removed at moderator discretion.");
+        public static readonly LocString AethergramAiTitle = new("conduct.aethergram.ai.title", "AI Usage");
+        public static readonly LocString AethergramAiBody = new("conduct.aethergram.ai.body", "We do not allow any content made by generative AI.");
+        public static readonly LocString AethergramAppealsTitle = new("conduct.aethergram.appeals.title", "Appeals");
+        public static readonly LocString AethergramAppealsBody = new("conduct.aethergram.appeals.body", "If you believe your content was wrongfully removed, please contact support through a ticket on our Discord server.");
 
         public static readonly LocString VelvetTitle = new("conduct.velvet.title", "Velvet Community Rules");
         public static readonly LocString VelvetIntro = new("conduct.velvet.intro", "Velvet is an 18+ space. Before you continue, please read the rules of the community.");
