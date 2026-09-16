@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "Chirp yanıtlarında medyayı göster",
   "settings.aethergramShowGifs": "GIF'li gramları göster",
   "settings.aethergramShowCommentMedia": "Gram yorumlarında medyayı göster",
+  "settings.aethergramShowSensitive": "Hassas gramları göster",
   "settings.showSensitive": "Hassas fotoğrafları her zaman göster",
   "settings.showSensitiveHint": "Hassas olarak işaretlenen fotoğraflar sen dokunana kadar kapalı kalır. Hemen görmek için bunu aç.",
   "settings.openOnStartup": "Açılışta aç",

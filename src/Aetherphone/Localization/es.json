@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "Mostrar multimedia en las respuestas a chirps",
   "settings.aethergramShowGifs": "Mostrar grams con GIF",
   "settings.aethergramShowCommentMedia": "Mostrar multimedia en los comentarios de grams",
+  "settings.aethergramShowSensitive": "Mostrar grams sensibles",
   "settings.showSensitive": "Mostrar siempre las fotos sensibles",
   "settings.showSensitiveHint": "Las fotos marcadas como sensibles quedan cubiertas hasta que las tocas. Activa esto para verlas de inmediato.",
   "settings.openOnStartup": "Abrir al iniciar",

@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "显示啾文回复中的媒体",
   "settings.aethergramShowGifs": "显示Aethergram的GIF帖子",
   "settings.aethergramShowCommentMedia": "显示Aethergram评论中的媒体",
+  "settings.aethergramShowSensitive": "显示Aethergram的敏感帖子",
   "settings.showSensitive": "始终显示敏感照片",
   "settings.showSensitiveHint": "标记为敏感的照片会一直遮盖，直到你点按为止。开启后可立即查看。",
   "settings.openOnStartup": "启动时打开",

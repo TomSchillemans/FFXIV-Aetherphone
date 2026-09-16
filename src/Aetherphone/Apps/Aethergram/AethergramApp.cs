@@ -48,7 +48,7 @@ internal sealed partial class AethergramApp : IResumableApp
     private const int MaxCommentLength = 500;
     private const float BottomNavHeight = 52f;
     private const int NavSlotCount = 4;
-    private const int FilterToggleCount = 2;
+    private const int FilterToggleCount = 3;
     private const float NavIconSize = 26f;
     private const float NavHoverRadius = 20f;
     private const float NavAvatarRadius = 13f;
@@ -216,6 +216,7 @@ internal sealed partial class AethergramApp : IResumableApp
         this.translation = translation;
         store = new AethergramStore(session, net.Account, net.Social, net.Grams, net.Safety, net.Media, realtimeSignals);
         store.SetFeedRegions(SocialRegion.FilterCsv(configuration.AethergramFeedRegionMask));
+        store.SetFeedSensitive(configuration.AethergramShowSensitivePosts, activeScope);
         account = net.Account;
         dmStore = new GramDmStore(session, net.GramDm, net.Social, net.Safety, net.Media, notifications, keyVault,
             conversationKeys, chatHistory, visibility, realtimeSignals, installer);
@@ -571,6 +572,11 @@ internal sealed partial class AethergramApp : IResumableApp
 
     private bool HiddenByMediaPreference(PostDto post)
     {
+        if (post.Sensitive && !configuration.AethergramShowSensitivePosts && !IsOwnPost(post))
+        {
+            return true;
+        }
+
         if (configuration.AethergramShowGifPosts)
         {
             return false;
@@ -579,6 +585,8 @@ internal sealed partial class AethergramApp : IResumableApp
         var photos = PostMedia.Photos(post.MediaUrls, post.MediaUrl);
         return photos.Length > 0 && GifMedia.IsGif(photos[0]);
     }
+
+    private bool IsOwnPost(PostDto post) => store.Me is { } me && me.Id == post.AuthorId;
 
     private bool HiddenByMediaPreference(CommentDto comment)
     {
@@ -600,7 +608,7 @@ internal sealed partial class AethergramApp : IResumableApp
             AddPostSheetItem(PostSheetAction.View, Loc.T(L.Aethergram.ViewPost), false);
         }
 
-        if (store.Me is { } me && me.Id == post.AuthorId)
+        if (IsOwnPost(post))
         {
             AddPostSheetItem(PostSheetAction.Edit, Loc.T(L.Aethergram.EditPost), false);
             AddPostSheetItem(PostSheetAction.Delete, Loc.T(L.Aethergram.DeleteConfirm), true);
@@ -1422,7 +1430,7 @@ internal sealed partial class AethergramApp : IResumableApp
 
     private bool FeedFiltersActive() =>
         !configuration.AethergramShowGifPosts || !configuration.AethergramShowCommentMedia
-        || configuration.AethergramFeedRegionMask != 0;
+        || !configuration.AethergramShowSensitivePosts || configuration.AethergramFeedRegionMask != 0;
 
     private void DrawFilterSheet(Rect screen)
     {
@@ -1433,9 +1441,11 @@ internal sealed partial class AethergramApp : IResumableApp
 
         filterLabels[0] = Loc.T(L.Settings.AethergramShowGifs);
         filterLabels[1] = Loc.T(L.Settings.AethergramShowCommentMedia);
+        filterLabels[2] = Loc.T(L.Settings.AethergramShowSensitive);
         Span<bool> values = stackalloc bool[FilterToggleCount];
         values[0] = configuration.AethergramShowGifPosts;
         values[1] = configuration.AethergramShowCommentMedia;
+        values[2] = configuration.AethergramShowSensitivePosts;
         var picked = filterSheet.Draw(screen, Ink, Loc.T(L.Aethergram.FeedFilters), filterLabels, values,
             configuration.AethergramFeedRegionMask, Loc.T(L.Aethergram.Regions), Loc.T(L.Aethergram.Done));
         switch (picked)
@@ -1445,6 +1455,10 @@ internal sealed partial class AethergramApp : IResumableApp
                 break;
             case 1:
                 configuration.AethergramShowCommentMedia = !configuration.AethergramShowCommentMedia;
+                break;
+            case 2:
+                configuration.AethergramShowSensitivePosts = !configuration.AethergramShowSensitivePosts;
+                store.SetFeedSensitive(configuration.AethergramShowSensitivePosts, activeScope);
                 break;
             case >= FilterToggleCount:
                 configuration.AethergramFeedRegionMask =

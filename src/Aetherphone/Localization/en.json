@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "Show media in chirp replies",
   "settings.aethergramShowGifs": "Show GIF grams",
   "settings.aethergramShowCommentMedia": "Show media in gram comments",
+  "settings.aethergramShowSensitive": "Show sensitive grams",
   "settings.showSensitive": "Always show sensitive photos",
   "settings.showSensitiveHint": "Photos marked sensitive stay covered until you tap them. Turn this on to see them straight away.",
   "settings.openOnStartup": "Open at startup",

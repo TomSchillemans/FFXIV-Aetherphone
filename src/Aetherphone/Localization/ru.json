@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "Показывать медиа в ответах на чирпы",
   "settings.aethergramShowGifs": "Показывать грамы с GIF",
   "settings.aethergramShowCommentMedia": "Показывать медиа в комментариях к грамам",
+  "settings.aethergramShowSensitive": "Показывать деликатные грамы",
   "settings.showSensitive": "Всегда показывать деликатные фото",
   "settings.showSensitiveHint": "Фото с отметкой о деликатности остаются скрытыми, пока вы их не нажмёте. Включите, чтобы видеть их сразу.",
   "settings.openOnStartup": "Открывать при запуске",

@@ -1661,6 +1661,7 @@ internal static class L
         public static readonly LocString ChirperShowReplyMedia = new("settings.chirperShowReplyMedia", "Show media in chirp replies");
         public static readonly LocString AethergramShowGifs = new("settings.aethergramShowGifs", "Show GIF grams");
         public static readonly LocString AethergramShowCommentMedia = new("settings.aethergramShowCommentMedia", "Show media in gram comments");
+        public static readonly LocString AethergramShowSensitive = new("settings.aethergramShowSensitive", "Show sensitive grams");
         public static readonly LocString ShowSensitive = new("settings.showSensitive", "Always show sensitive photos");
         public static readonly LocString ShowSensitiveHint = new("settings.showSensitiveHint", "Photos marked sensitive stay covered until you tap them. Turn this on to see them straight away.");
         public static readonly LocString OpenOnStartup = new("settings.openOnStartup", "Open at startup");

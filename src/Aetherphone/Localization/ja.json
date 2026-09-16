@@ -785,6 +785,7 @@
   "settings.chirperShowReplyMedia": "チャープ返信のメディアを表示",
   "settings.aethergramShowGifs": "AethergramのGIF投稿を表示",
   "settings.aethergramShowCommentMedia": "Aethergramのコメントのメディアを表示",
+  "settings.aethergramShowSensitive": "Aethergramのセンシティブな投稿を表示",
   "settings.showSensitive": "センシティブな写真を常に表示",
   "settings.showSensitiveHint": "センシティブに設定された写真は、タップするまで隠れたままになります。オンにするとすぐに表示されます。",
   "settings.openOnStartup": "起動時に開く",
