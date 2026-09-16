@@ -689,7 +689,7 @@ internal sealed partial class ChirperApp
         using (AppSurface.BeginEdgeToEdge(body))
         {
             ImGui.Dummy(new Vector2(0f, 12f * scale));
-            BadgeProgressCard.Draw(progress, ChirperInk.Shared, RoleInk.IsLight(theme));
+            BadgeProgressCard.Draw(progress, ChirperInk.Shared, RoleInk.IsLight(theme), Id);
         }
     }
 
