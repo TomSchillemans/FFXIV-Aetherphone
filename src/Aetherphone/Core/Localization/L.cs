@@ -1761,6 +1761,43 @@ internal static class L
         public static readonly LocString SectionPhone = new("changelog.sectionPhone", "Phone");
         public static readonly LocString SectionSocial = new("changelog.sectionSocial", "Chirper and Aethergram");
         public static readonly LocString SectionAethergramVelvet = new("changelog.sectionAethergramVelvet", "Aethergram and Velvet");
+        public static readonly LocString SectionChirperAethergramVelvet = new("changelog.sectionChirperAethergramVelvet", "Chirper, Aethergram and Velvet");
+
+        public static readonly LocString[] Release1033Social =
+        {
+            new("changelog.r1033.0",
+                "Rewrote the community rules to be shorter: they now list what must be marked sensitive and what is not allowed"),
+            new("changelog.r1033.1",
+                "Added a Badge progress page under More on your own profile: your followers and likes against that app's badge and Verified"),
+        };
+
+        public static readonly LocString[] Release1033ChirperAethergramVelvet =
+        {
+            new("changelog.r1033.2",
+                "Added a Likes count to profiles: the reactions a person's posts have received in that app"),
+            new("changelog.r1033.3",
+                "Added an AI Usage block to the community rules: content made by generative AI is not allowed"),
+        };
+
+        public static readonly LocString[] Release1033AethergramVelvet =
+        {
+            new("changelog.r1033.4",
+                "Moved the photo shape choice when posting into a labeled row under the preview, so Square, Portrait and Landscape are one tap away"),
+        };
+
+        public static readonly LocString[] Release1033Aethergram =
+        {
+            new("changelog.r1033.5",
+                "Added Show sensitive grams to the feed filters: turn it off to keep grams marked sensitive out of your feeds"),
+            new("changelog.r1033.6",
+                "Fixed the X on a photo tag not removing the tag"),
+        };
+
+        public static readonly LocString[] Release1033Wallet =
+        {
+            new("changelog.r1033.7",
+                "Improved stability: currency amounts are now read in step with the game instead of while the screen draws, contributed by Deldee"),
+        };
 
         public static readonly LocString[] Release1032Phone =
         {
