@@ -172,7 +172,13 @@ internal sealed partial class AethergramApp
         Elevation.Card(drawList, preview.Min, preview.Max, rounding, scale);
         var result = carousel.Draw(drawList, preview, post.Id, photos, rounding, editPostPreviewPage);
         Material.EdgeSquircle(drawList, preview.Min, preview.Max, rounding, scale);
-        if (DrawComposeTags(drawList, preview, result.Index, scale))
+        if (DrawComposeTags(drawList, preview, result.Index, scale, out var overClose))
+        {
+            carousel.CancelTap();
+            return result.Index;
+        }
+
+        if (overClose)
         {
             carousel.CancelTap();
             return result.Index;

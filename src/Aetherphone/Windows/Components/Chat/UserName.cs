@@ -27,6 +27,21 @@ internal static class UserName
         communityImages = null;
     }
 
+    public static BadgeStyle? FindBadge(string badgeId)
+    {
+        return communityCatalog?.Find(badgeId);
+    }
+
+    public static void DrawBadge(ImDrawListPtr drawList, Vector2 center, BadgeStyle? badge, bool light, float size)
+    {
+        if (communityImages is null)
+        {
+            return;
+        }
+
+        BadgeStrip.DrawOne(drawList, center, badge, communityImages, light, size);
+    }
+
     public static float Reserve(int badges, in TextStyle style, int maxBadges = 1)
     {
         var shown = Math.Min(RoleBadges.Count(badges), maxBadges);

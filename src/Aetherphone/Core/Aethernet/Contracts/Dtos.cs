@@ -127,6 +127,17 @@ internal sealed record InventoryEquipRequest(string Kind, string ItemId, int? Sl
 
 internal sealed record AwardedBadgesDto(BadgeDescriptorDto[] Badges);
 
+internal sealed record BadgeProgressTargetDto(
+    string Key,
+    string BadgeId,
+    bool Held,
+    int Followers,
+    int RequiredFollowers,
+    int Likes,
+    int RequiredLikes);
+
+internal sealed record BadgeProgressDto(int Followers, BadgeProgressTargetDto[] Targets);
+
 internal sealed record UpdateBadgeVisibilityRequest(bool Hidden);
 
 internal sealed record PatreonLinkStartResponse(bool Ok, string? Reason, string? Url, int ExpiresInSeconds);

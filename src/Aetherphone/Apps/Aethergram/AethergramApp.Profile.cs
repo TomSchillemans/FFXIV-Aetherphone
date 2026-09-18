@@ -20,6 +20,7 @@ internal sealed partial class AethergramApp
         FollowRequests,
         Encryption,
         Rules,
+        BadgeProgress,
         Report,
         Block,
     }
@@ -30,6 +31,7 @@ internal sealed partial class AethergramApp
     private const float ProfileHeadTop = 12f;
     private const float ProfileStatsGap = 18f;
     private const float ProfileStatColumnPad = 10f;
+    private const float ProfileStatCount = 3f;
     private const float ProfileBlockGap = 10f;
     private const float ProfileChipHeight = SocialChrome.MetaChipHeight;
     private const float ProfileButtonGap = 6f;
@@ -40,7 +42,7 @@ internal sealed partial class AethergramApp
     private const float ProfileEmptyHeight = 250f;
     private const float ProfileCreateWidth = 132f;
     private const float PrivateLockRadius = 26f;
-    private const int ProfileMenuMaxItems = 5;
+    private const int ProfileMenuMaxItems = 6;
     private const int ProfileTabCount = 2;
 
     private static readonly TextStyle OwnProfileTitleStyle = new(1.15f, FontWeight.SemiBold);
@@ -317,13 +319,13 @@ internal sealed partial class AethergramApp
         var widest = MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatPosts), ProfileStatLabelStyle).X,
             MathF.Max(Typography.Measure(Loc.T(L.Aethergram.StatFollowers), ProfileStatLabelStyle).X,
                 Typography.Measure(Loc.T(L.Aethergram.StatFollowing), ProfileStatLabelStyle).X));
-        return (widest + ProfileStatColumnPad * scale) * 3f <= available;
+        return (widest + ProfileStatColumnPad * scale) * ProfileStatCount <= available;
     }
 
     private void DrawProfileStats(ImDrawListPtr drawList, UserDto user, float left, float right, float centerY)
     {
         var scale = UiScale.Current;
-        var column = MathF.Max(1f, (right - left) / 3f);
+        var column = MathF.Max(1f, (right - left) / ProfileStatCount);
         var valueHeight = Typography.LineHeight(ProfileStatValueStyle);
         var labelHeight = Typography.LineHeight(ProfileStatLabelStyle);
         var top = centerY - (valueHeight + labelHeight) * 0.5f;
@@ -560,11 +562,32 @@ internal sealed partial class AethergramApp
         ImGui.Dummy(new Vector2(width, subtitleTop + subtitleHeight + 24f * scale - origin.Y));
     }
 
+    private void DrawBadgeProgress(Rect area)
+    {
+        var scale = UiScale.Current;
+        DrawScreenHeader(area, Loc.T(L.Social.BadgeProgress));
+        var body = new Rect(new Vector2(area.Min.X, area.Min.Y + AppHeader.Height * scale), area.Max);
+        store.EnsureBadgeProgress();
+        var progress = store.BadgeProgress;
+        if (progress is null)
+        {
+            Typography.DrawCentered(body.Center, Loc.T(L.Common.Loading), Ink.MutedInk);
+            return;
+        }
+
+        using (AppSurface.BeginEdgeToEdge(body))
+        {
+            ImGui.Dummy(new Vector2(0f, ProfileBlockGap * scale));
+            BadgeProgressCard.Draw(progress, Ink, RoleInk.IsLight(theme), Id);
+        }
+    }
+
     private void OpenProfileMenu()
     {
         profileMenuCount = 0;
         AddProfileMenuItem(Loc.T(L.Aethergram.Settings), ProfileMenuAction.Settings);
         AddProfileMenuItem(Loc.T(L.Aethergram.SavedTitle), ProfileMenuAction.Saved);
+        AddProfileMenuItem(Loc.T(L.Social.BadgeProgress), ProfileMenuAction.BadgeProgress);
         var pending = store.PendingFollowRequestCount;
         AddProfileMenuItem(pending > 0 ? Loc.T(L.Social.FollowRequestsCount, pending) : Loc.T(L.Social.FollowRequests),
             ProfileMenuAction.FollowRequests);
@@ -601,6 +624,9 @@ internal sealed partial class AethergramApp
                 break;
             case ProfileMenuAction.Saved:
                 OpenSaved();
+                break;
+            case ProfileMenuAction.BadgeProgress:
+                router.Push(AethergramRoute.BadgeProgress);
                 break;
             case ProfileMenuAction.FollowRequests:
                 OpenFollowRequests();

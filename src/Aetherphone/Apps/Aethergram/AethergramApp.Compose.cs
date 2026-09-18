@@ -231,9 +231,13 @@ internal sealed partial class AethergramApp
         var top = area.Min.Y + AppHeader.Height * scale;
         var paneHeight = MathF.Min(area.Width, (area.Max.Y - top) * ComposePaneFraction);
         var pane = new Rect(new Vector2(area.Min.X, top), new Vector2(area.Max.X, top + paneHeight));
-        composeSession.DrawPickPane(pane, scale, ComposeStyle, ComposeAspect, ComposeAllowsReveal,
-            ComposeAllowsAspectChoice, !store.Posting);
+        composeSession.DrawPickPane(pane, scale, ComposeStyle, ComposeAspect, ComposeAllowsReveal, !store.Posting);
         var gridTop = pane.Max.Y + ComposeGridGap * scale;
+        if (ComposeAllowsAspectChoice && composeSession.ShowsAspectRail)
+        {
+            gridTop = composeSession.DrawAspectRail(area, pane.Max.Y, scale, ui, !store.Posting);
+        }
+
         if (composeSession.Notice.Length > 0)
         {
             var notice = Typography.FitText(composeSession.Notice, area.Width - CellPadX * 2f * scale,
@@ -635,9 +639,11 @@ internal sealed partial class AethergramApp
         return inputs;
     }
 
-    private bool DrawComposeTags(ImDrawListPtr drawList, Rect preview, int photoIndex, float scale)
+    private bool DrawComposeTags(ImDrawListPtr drawList, Rect preview, int photoIndex, float scale,
+        out bool overClose)
     {
         var removed = false;
+        overClose = false;
         for (var index = composeTags.Count - 1; index >= 0; index--)
         {
             var tag = composeTags[index];
@@ -663,8 +669,17 @@ internal sealed partial class AethergramApp
                 TextStyles.FootnoteEmphasized);
             var closeCenter = new Vector2(max.X - 9f * scale, (min.Y + max.Y) * 0.5f);
             PhoneIcon.Draw(drawList, closeCenter, PhoneIcons.X, Palette.WithAlpha(Ink.White, 0.75f), 10f * scale);
-            if (UiInteract.HoverClick(closeCenter - new Vector2(8f * scale, 8f * scale),
-                    closeCenter + new Vector2(8f * scale, 8f * scale)))
+            var closeHit = new Vector2(8f * scale, 8f * scale);
+            var closeMin = closeCenter - closeHit;
+            var closeMax = closeCenter + closeHit;
+            var closeHovered = UiInteract.Hover(closeMin, closeMax);
+            if (closeHovered)
+            {
+                overClose = true;
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            }
+
+            if (UiInteract.Click(closeMin, closeMax, closeHovered))
             {
                 composeTags.RemoveAt(index);
                 removed = true;
@@ -694,13 +709,13 @@ internal sealed partial class AethergramApp
 
         ImageFit.DrawLetterboxed(drawList, texture, preview, uv0, uv1, rounding);
         Material.EdgeSquircle(drawList, preview.Min, preview.Max, rounding, scale);
-        if (DrawComposeTags(drawList, preview, composeSession.ClampedPreviewIndex, scale))
+        if (DrawComposeTags(drawList, preview, composeSession.ClampedPreviewIndex, scale, out var overClose))
         {
             return false;
         }
 
-        var hovered = UiInteract.Hover(preview.Min, preview.Max);
-        if (tooltip.Length > 0)
+        var hovered = !overClose && UiInteract.Hover(preview.Min, preview.Max);
+        if (tooltip.Length > 0 && !overClose)
         {
             HoverTooltip.Show(preview, tooltip, HoverLabelSide.Below);
         }

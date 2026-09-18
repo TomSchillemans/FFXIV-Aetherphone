@@ -41,6 +41,7 @@ internal enum AethergramScreen
     Hashtag,
     Activity,
     NewMessage,
+    BadgeProgress,
 }
 
 internal readonly record struct AethergramRoute(
@@ -59,6 +60,7 @@ internal readonly record struct AethergramRoute(
     public static readonly AethergramRoute Saved = new(AethergramScreen.Saved);
     public static readonly AethergramRoute Encryption = new(AethergramScreen.Encryption);
     public static readonly AethergramRoute Activity = new(AethergramScreen.Activity);
+    public static readonly AethergramRoute BadgeProgress = new(AethergramScreen.BadgeProgress);
     public static AethergramRoute Detail(string postId) => new(AethergramScreen.Detail, postId);
     public static AethergramRoute EditPost(string postId) => new(AethergramScreen.EditPost, postId);
 

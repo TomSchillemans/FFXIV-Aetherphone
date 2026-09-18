@@ -96,6 +96,7 @@ internal sealed class Configuration : IPluginConfiguration, IHomeConfiguration, 
     public bool ChirperShowCommentMedia { get; set; } = true;
     public bool AethergramShowGifPosts { get; set; } = true;
     public bool AethergramShowCommentMedia { get; set; } = true;
+    public bool AethergramShowSensitivePosts { get; set; } = true;
     public int ChirperFeedRegionMask { get; set; }
     public int AethergramFeedRegionMask { get; set; }
     public int ChirperFeedScope { get; set; }

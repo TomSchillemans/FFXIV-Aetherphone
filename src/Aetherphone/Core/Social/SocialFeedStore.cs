@@ -26,6 +26,7 @@ internal abstract class SocialFeedStore : IDisposable
 {
     private const int CommentImageDimension = 1280;
     private const string CommentUploadScope = "comment";
+    private const long BadgeProgressRefreshMilliseconds = 60_000;
 
     protected readonly AethernetSession session;
     protected readonly AccountClient account;
@@ -91,7 +92,11 @@ internal abstract class SocialFeedStore : IDisposable
     private readonly FeedLane<PostDto> hashtagLane = new(ByNewestFirst);
     private volatile string? hashtagTag;
     private volatile string? feedRegions;
+    private volatile bool feedIncludesSensitive = true;
     private string? lastAccountId;
+    private volatile BadgeProgressView? badgeProgress;
+    private long badgeProgressAttemptTick;
+    private volatile bool badgeProgressLoading;
 
     protected SocialFeedStore(
         AethernetSession session,
@@ -152,6 +157,8 @@ internal abstract class SocialFeedStore : IDisposable
         profileUser = null;
         profileLoading = false;
         profileFailed = false;
+        badgeProgress = null;
+        badgeProgressAttemptTick = 0;
         detailPostId = null;
         detailComments = Array.Empty<CommentDto>();
         commentsCursor = null;
@@ -300,6 +307,27 @@ internal abstract class SocialFeedStore : IDisposable
     public bool ProfileLoadingMore => profileLane.LoadingMore;
     public bool HasMoreProfilePosts => profileLane.HasMore;
     public bool ProfileFailed => profileFailed;
+
+    public BadgeProgressView? BadgeProgress
+    {
+        get
+        {
+            var view = badgeProgress;
+            if (view is null)
+            {
+                return null;
+            }
+
+            var current = view.ForCurrentLanguage();
+            if (!ReferenceEquals(current, view))
+            {
+                badgeProgress = current;
+            }
+
+            return current;
+        }
+    }
+
     public PostDto? DetailPost => detailPost;
     public CommentDto[] DetailComments => detailComments;
     public bool HasMoreComments => commentsCursor is not null;
@@ -351,7 +379,7 @@ internal abstract class SocialFeedStore : IDisposable
         : user.FollowRequested ? FollowState.Requested
         : FollowState.None;
 
-    protected abstract Task<FeedPage?> FetchFeedAsync(string feedKey, string? cursor, string? regions,
+    protected abstract Task<FeedPage?> FetchFeedAsync(string feedKey, string? cursor, string? regions, bool includeSensitive,
         CancellationToken token, Action<AepFailure>? onFailure = null);
 
     protected abstract Task<FeedPage?> FetchProfilePostsAsync(string userId, string? cursor, CancellationToken token);
@@ -538,6 +566,20 @@ internal abstract class SocialFeedStore : IDisposable
         RefreshFeed(SocialFeedScope.Latest);
     }
 
+    public void SetFeedSensitive(bool includeSensitive, SocialFeedScope activeScope)
+    {
+        if (feedIncludesSensitive == includeSensitive)
+        {
+            return;
+        }
+
+        feedIncludesSensitive = includeSensitive;
+        forYouLane.Clear();
+        latestLane.Clear();
+        followingLane.Clear();
+        RefreshFeed(activeScope);
+    }
+
     private string? RegionsFor(SocialFeedScope scope) =>
         scope == SocialFeedScope.Following ? null : feedRegions;
 
@@ -551,10 +593,12 @@ internal abstract class SocialFeedStore : IDisposable
         var lane = Lane(scope);
         lane.Loading = true;
         var regions = RegionsFor(scope);
+        var includeSensitive = feedIncludesSensitive;
         work.Run("feed refresh", async token =>
         {
             var reported = AepFailure.None;
-            var page = await FetchFeedAsync(FeedKey(scope), null, regions, token, failure => reported = failure)
+            var page = await FetchFeedAsync(FeedKey(scope), null, regions, includeSensitive, token,
+                    failure => reported = failure)
                 .ConfigureAwait(false);
             if (page is not null)
             {
@@ -588,10 +632,12 @@ internal abstract class SocialFeedStore : IDisposable
 
         lane.LoadingMore = true;
         var regions = RegionsFor(scope);
+        var includeSensitive = feedIncludesSensitive;
         work.Run("feed more", async token =>
         {
             var reported = AepFailure.None;
-            var page = await FetchFeedAsync(FeedKey(scope), cursor, regions, token, failure => reported = failure)
+            var page = await FetchFeedAsync(FeedKey(scope), cursor, regions, includeSensitive, token,
+                    failure => reported = failure)
                 .ConfigureAwait(false);
             if (page is not null)
             {
@@ -1326,6 +1372,32 @@ internal abstract class SocialFeedStore : IDisposable
 
         profileUserId = null;
         OpenProfile(current);
+    }
+
+    public void EnsureBadgeProgress()
+    {
+        if (!session.IsSignedIn || badgeProgressLoading)
+        {
+            return;
+        }
+
+        var now = Environment.TickCount64;
+        var lastAttempt = Interlocked.Read(ref badgeProgressAttemptTick);
+        if (lastAttempt != 0 && now - lastAttempt < BadgeProgressRefreshMilliseconds)
+        {
+            return;
+        }
+
+        Interlocked.Exchange(ref badgeProgressAttemptTick, now);
+        badgeProgressLoading = true;
+        work.Run("badge progress", async token =>
+        {
+            var progress = await account.BadgeProgressAsync(token).ConfigureAwait(false);
+            if (progress is not null)
+            {
+                badgeProgress = BadgeProgressView.From(progress);
+            }
+        }, () => badgeProgressLoading = false);
     }
 
     public void EnsureUserList(string sourceId, UserListKind kind)

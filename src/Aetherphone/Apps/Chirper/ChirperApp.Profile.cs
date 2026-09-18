@@ -630,6 +630,7 @@ internal sealed partial class ChirperApp
         sheetCount = 0;
         if (user.IsMe)
         {
+            AddSheetItem(PostSheetAction.BadgeProgress, Loc.T(L.Social.BadgeProgress), false);
             AddSheetItem(PostSheetAction.Rules, Loc.T(L.Conduct.Eyebrow), false);
         }
         else
@@ -663,6 +664,29 @@ internal sealed partial class ChirperApp
             case PostSheetAction.Rules:
                 conduct.ShowRules(Id);
                 break;
+            case PostSheetAction.BadgeProgress:
+                router.Push(ChirperRoute.BadgeProgress);
+                break;
+        }
+    }
+
+    private void DrawBadgeProgress(Rect area)
+    {
+        var scale = UiScale.Current;
+        DrawScreenHeader(area, Loc.T(L.Social.BadgeProgress), 0f, string.Empty, true);
+        var body = new Rect(new Vector2(area.Min.X, area.Min.Y + AppHeader.Height * scale), area.Max);
+        store.EnsureBadgeProgress();
+        var progress = store.BadgeProgress;
+        if (progress is null)
+        {
+            Typography.DrawCentered(body.Center, Loc.T(L.Common.Loading), ChirperInk.MutedInk);
+            return;
+        }
+
+        using (AppSurface.BeginEdgeToEdge(body))
+        {
+            ImGui.Dummy(new Vector2(0f, 12f * scale));
+            BadgeProgressCard.Draw(progress, ChirperInk.Shared, RoleInk.IsLight(theme), Id);
         }
     }
 
